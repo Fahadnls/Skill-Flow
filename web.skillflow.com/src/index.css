@@ -1,0 +1,340 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-white text-[#111218] transition-colors duration-500 overflow-x-hidden;
+  }
+
+  .dark body {
+    @apply bg-[#0a0a0c] text-white;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  body {
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+    font-family: "Plus Jakarta Sans", "Manrope", "Segoe UI", sans-serif;
+    background: linear-gradient(180deg, #f6f7fd 0%, #f4f4fb 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input {
+    font: inherit;
+  }
+}
+
+@layer utilities {
+  .bg-site-gradient {
+    background:
+      radial-gradient(circle at 10% 10%, rgba(186, 228, 255, 0.92) 0%, rgba(186, 228, 255, 0) 24%),
+      radial-gradient(circle at 16% 84%, rgba(255, 201, 196, 0.88) 0%, rgba(255, 201, 196, 0) 24%),
+      radial-gradient(circle at 96% 8%, rgba(217, 214, 255, 0.88) 0%, rgba(217, 214, 255, 0) 22%),
+      linear-gradient(180deg, #f5f7fd 0%, #f4f4fb 100%);
+  }
+
+  .animate-float-glow {
+    animation: floatGlow 14s ease-in-out infinite;
+  }
+
+  .animate-float-glow-delayed {
+    animation: floatGlow 16s ease-in-out -5s infinite;
+  }
+
+  .animate-float-glow-slow {
+    animation: floatGlow 18s ease-in-out -8s infinite;
+  }
+
+  .animate-gradient-drift {
+    animation: gradientDrift 14s ease-in-out infinite alternate;
+  }
+
+  .animate-orbit-glow {
+    animation: orbitGlow 18s ease-in-out infinite alternate;
+  }
+
+  .animate-orbit-glow-reverse {
+    animation: orbitGlowReverse 22s ease-in-out infinite alternate;
+  }
+
+  .animate-logo-marquee {
+    animation: logoMarquee 30s linear infinite;
+    will-change: transform;
+  }
+
+  .logo-marquee {
+    -webkit-mask-image: linear-gradient(to right, transparent 0, black 5%, black 95%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, black 5%, black 95%, transparent 100%);
+  }
+
+  .animate-visual-panel {
+    animation: visualPanelReveal 850ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-visual-panel-delayed {
+    animation: visualPanelReveal 950ms cubic-bezier(0.18, 0.8, 0.2, 1) 90ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-visual-panel-soft {
+    animation: visualPanelReveal 1000ms cubic-bezier(0.18, 0.8, 0.2, 1) 160ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-card-burst-1 {
+    animation: cardBurst 760ms cubic-bezier(0.2, 0.84, 0.24, 1) 180ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-card-burst-2 {
+    animation: cardBurst 820ms cubic-bezier(0.2, 0.84, 0.24, 1) 260ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-card-burst-3 {
+    animation: cardBurst 760ms cubic-bezier(0.2, 0.84, 0.24, 1) 320ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-card-burst-4 {
+    animation: cardBurst 860ms cubic-bezier(0.2, 0.84, 0.24, 1) 400ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-card-burst-5 {
+    animation: cardBurst 820ms cubic-bezier(0.2, 0.84, 0.24, 1) 470ms both;
+    transform-origin: center;
+    will-change: transform, opacity;
+  }
+
+  .animate-chart-line {
+    animation: chartLineReveal 2.2s ease-out both, chartLineFloat 6s ease-in-out 2.2s infinite;
+  }
+
+  .animate-chart-fade {
+    animation: chartFadeReveal 1.6s ease-out both;
+    transform-origin: bottom;
+  }
+
+  .animate-chart-marker {
+    animation: chartMarkerPulse 2.4s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  .page-transition-shell {
+    will-change: transform, opacity;
+  }
+
+  .page-transition-out {
+    animation: pageFadeOut 180ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .page-transition-in {
+    animation: pageFadeIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes floatGlow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  35% {
+    transform: translate3d(22px, -12px, 0) scale(1.08);
+  }
+
+  70% {
+    transform: translate3d(-14px, 14px, 0) scale(0.96);
+  }
+}
+
+@keyframes gradientDrift {
+  0% {
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: scale(1.04) translate3d(12px, -8px, 0);
+  }
+}
+
+@keyframes orbitGlow {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.94);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: translate3d(34px, -16px, 0) scale(1.08);
+    opacity: 0.62;
+  }
+
+  100% {
+    transform: translate3d(-10px, 28px, 0) scale(0.98);
+    opacity: 0.38;
+  }
+}
+
+@keyframes orbitGlowReverse {
+  0% {
+    transform: translate3d(0, 0, 0) scale(0.96);
+    opacity: 0.34;
+  }
+
+  50% {
+    transform: translate3d(-26px, 18px, 0) scale(1.06);
+    opacity: 0.52;
+  }
+
+  100% {
+    transform: translate3d(18px, -22px, 0) scale(0.92);
+    opacity: 0.3;
+  }
+}
+
+@keyframes logoMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-25%, 0, 0);
+  }
+}
+
+@keyframes visualPanelReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+
+  65% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes cardBurst {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.72);
+  }
+
+  70% {
+    opacity: 1;
+    transform: translate3d(0, -3px, 0) scale(1.02);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes chartLineReveal {
+  0% {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  100% {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes chartFadeReveal {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.82);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes chartLineFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes chartMarkerPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.05);
+    opacity: 0.92;
+  }
+}
+
+@keyframes pageFadeOut {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.992);
+  }
+}
+
+@keyframes pageFadeIn {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.992);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
