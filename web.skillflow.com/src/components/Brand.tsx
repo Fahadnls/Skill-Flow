@@ -11,7 +11,7 @@ export const Brand = () => {
                 <span className="absolute h-[13px] w-[13px] translate-y-[2px] rotate-[-12deg] rounded-tl-[9px] border-[3px] border-b-transparent border-r-transparent border-white" />
                 <span className="absolute bottom-[3px] right-[5px] h-[7px] w-[7px] rounded-full bg-white" />
             </span>
-            <span className="text-[1.05rem] font-black tracking-[-0.04em] text-[#17181f] dark:text-white">SKILLFLOW  staging</span>
+            <span className="text-[1.05rem] font-black tracking-[-0.04em] text-[#17181f] dark:text-white">SKILLFLOW  stage</span>
         </SiteLink>
     );
 };
