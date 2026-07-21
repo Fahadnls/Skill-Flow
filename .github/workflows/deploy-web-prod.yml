@@ -36,25 +36,22 @@ jobs:
           script: |
             set -e
 
-            cd /opt/apps/production/web
-
-            echo "========== CURRENT DIRECTORY =========="
-            pwd
-
-            echo "========== FILES =========="
-            ls -la
-
-            echo "========== DOCKER COMPOSE =========="
-            cat docker-compose.yml
-
-            echo "========== RESOLVED CONFIG =========="
-            docker compose config
-
-            echo "========== BUILD =========="
-            docker compose build --no-cache
-
-            echo "========== START =========="
-            docker compose up -d
-
-            echo "========== STATUS =========="
-            docker compose ps
+             cd /opt/apps/production/web/web.skillflow.com
+        
+             echo "========== CURRENT DIRECTORY =========="
+             pwd
+        
+             echo "========== FILES =========="
+             ls -la
+        
+             echo "========== DOCKER COMPOSE =========="
+             cat docker-compose.yml
+        
+             echo "========== BUILD =========="
+             docker compose build --no-cache
+        
+             echo "========== START =========="
+             docker compose up -d
+        
+             echo "========== STATUS =========="
+             docker compose ps
