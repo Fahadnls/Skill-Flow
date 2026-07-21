@@ -39,6 +39,7 @@ jobs:
             set -e
 
             APP_DIR="/opt/apps/staging/web/web.skillflow.com"
+            
             COMPOSE_FILE="docker-compose.stage.yml"
 
             echo "========== APPLICATION DIRECTORY =========="
