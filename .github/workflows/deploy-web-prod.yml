@@ -14,7 +14,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to EC2
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy Web Project
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "web.skillflow.com/*"
+          target: "/opt/apps/production/web"
+          overwrite: true
+
+      - name: Deploy
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -23,24 +36,18 @@ jobs:
           script: |
             set -e
 
-            echo "Go to project..."
-            cd /opt/apps/Skill-Flow
+            cd /opt/apps/production/web
 
-            echo "Checkout deployment branch..."
-            git fetch origin
-            git checkout web-prod-deploy
-            git reset --hard origin/web-prod-deploy
+            echo "Stopping old containers..."
+            docker compose down
 
-            echo "Go to web project..."
-            cd web.skillflow.com
-
-            echo "Build image..."
+            echo "Building latest image..."
             docker compose build --no-cache
 
-            echo "Restart container..."
+            echo "Starting containers..."
             docker compose up -d
 
-            echo "Cleanup..."
+            echo "Cleaning unused images..."
             docker image prune -f
 
             docker compose ps
