@@ -48,10 +48,10 @@ jobs:
              cat docker-compose.stage.yml
         
              echo "========== BUILD =========="
-             docker compose build --no-cache
+             docker compose -f docker-compose.stage.yml build --no-cache
         
              echo "========== START =========="
-             docker compose up -d
+             docker compose -f docker-compose.stage.yml up -d
         
              echo "========== STATUS =========="
-             docker compose ps
+             docker compose -f docker-compose.stage.yml ps
