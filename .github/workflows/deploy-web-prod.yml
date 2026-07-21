@@ -41,7 +41,7 @@ jobs:
             APP_DIR="/opt/apps/production/web/web.skillflow.com"
             COMPOSE_FILE="docker-compose.yml"
 
-            echo "========== APPLICATION DIRECTORY =========="
+             echo "========== APPLICATION DIRECTORY =========="
             cd "$APP_DIR"
             pwd
 
@@ -58,12 +58,18 @@ jobs:
             echo "========== BUILD STAGING IMAGE =========="
             docker compose -f "$COMPOSE_FILE" build --no-cache
 
-            echo "========== START STAGING CONTAINER =========="
-            docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
+            echo "========== STOP OLD STAGING =========="
+            docker compose -f "$COMPOSE_FILE" down || true
+
+            echo "========== REMOVE OLD CONTAINER =========="
+            docker rm -f skillflow-web-stage || true
+
+            echo "========== START STAGING =========="
+            docker compose -f "$COMPOSE_FILE" up -d --build --remove-orphans
 
             echo "========== CONTAINER STATUS =========="
             docker compose -f "$COMPOSE_FILE" ps
 
             echo "========== REMOVE UNUSED IMAGES =========="
             docker image prune -f
-             
+
