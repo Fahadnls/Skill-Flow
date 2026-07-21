@@ -1,3 +1,5 @@
+name: skillflow-web-stage
+
 services:
   web:
     container_name: skillflow-web-stage
