@@ -28,27 +28,33 @@ jobs:
           overwrite: true
 
       - name: Deploy
-  uses: appleboy/ssh-action@v1.2.0
-  with:
-    host: ${{ secrets.EC2_HOST }}
-    username: ${{ secrets.EC2_USER }}
-    key: ${{ secrets.EC2_SSH_KEY }}
-    script: |
-      set -e
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
 
-      cd /opt/apps/production/web
+            cd /opt/apps/production/web
 
-      echo "========== CURRENT DIRECTORY =========="
-      pwd
+            echo "========== CURRENT DIRECTORY =========="
+            pwd
 
-      echo "========== FILES =========="
-      ls -la
+            echo "========== FILES =========="
+            ls -la
 
-      echo "========== DOCKER COMPOSE =========="
-      cat docker-compose.yml
+            echo "========== DOCKER COMPOSE =========="
+            cat docker-compose.yml
 
-      echo "========== RESOLVED CONFIG =========="
-      docker compose config
+            echo "========== RESOLVED CONFIG =========="
+            docker compose config
 
-      echo "========== BUILD =========="
-      docker compose build --no-cache
+            echo "========== BUILD =========="
+            docker compose build --no-cache
+
+            echo "========== START =========="
+            docker compose up -d
+
+            echo "========== STATUS =========="
+            docker compose ps
