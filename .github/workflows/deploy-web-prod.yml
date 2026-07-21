@@ -5,8 +5,8 @@ on:
     branches:
       - web-prod-deploy
     paths:
-      - 'web.skillflow.com/**'
-      - '.github/workflows/deploy-web-prod.yml'
+      # - 'web.skillflow.com/**'
+      # - '.github/workflows/deploy-web-prod.yml'
 
 jobs:
   deploy:
