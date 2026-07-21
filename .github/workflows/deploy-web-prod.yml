@@ -1,33 +1,35 @@
-name: Deploy Web Production
+name: Deploy Web Staging
 
 on:
   push:
     branches:
       - web-prod-deploy
     paths:
-      - 'web.skillflow.com/**'
+      - "web.skillflow.com/**"
+      - ".github/workflows/deploy-web-prod.yml"
 
   workflow_dispatch:
 
 jobs:
   deploy:
+    name: Deploy Web Production
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Copy Web Project
+      - name: Copy Web Project to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "web.skillflow.com/*"
-          target: "/opt/apps/production/web"
+          target: "/opt/apps/staging/web"
           overwrite: true
 
-      - name: Deploy
+      - name: Deploy Staging Web
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -36,22 +38,32 @@ jobs:
           script: |
             set -e
 
-             cd /opt/apps/production/web/web.skillflow.com
-        
-             echo "========== CURRENT DIRECTORY =========="
-             pwd
-        
-             echo "========== FILES =========="
-             ls -la
-        
-             echo "========== DOCKER COMPOSE =========="
-             cat docker-compose.yml
-        
-             echo "========== BUILD =========="
-             docker compose build --no-cache
-        
-             echo "========== START =========="
-             docker compose up -d
-        
-             echo "========== STATUS =========="
-             docker compose ps
+            APP_DIR="/opt/apps/production/web/web.skillflow.com"
+            COMPOSE_FILE="docker-compose.yml"
+
+            echo "========== APPLICATION DIRECTORY =========="
+            cd "$APP_DIR"
+            pwd
+
+            echo "========== PROJECT FILES =========="
+            ls -la
+
+            echo "========== STAGING COMPOSE FILE =========="
+            test -f "$COMPOSE_FILE"
+            cat "$COMPOSE_FILE"
+
+            echo "========== VALIDATE COMPOSE =========="
+            docker compose -f "$COMPOSE_FILE" config
+
+            echo "========== BUILD STAGING IMAGE =========="
+            docker compose -f "$COMPOSE_FILE" build --no-cache
+
+            echo "========== START STAGING CONTAINER =========="
+            docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
+
+            echo "========== CONTAINER STATUS =========="
+            docker compose -f "$COMPOSE_FILE" ps
+
+            echo "========== REMOVE UNUSED IMAGES =========="
+            docker image prune -f
+             
