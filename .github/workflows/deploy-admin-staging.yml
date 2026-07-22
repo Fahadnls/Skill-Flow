@@ -1,20 +1,20 @@
-name: Deploy admin production
+name: Deploy admin staging
 
 
 on:
   push:
     branches:
-      - admin-prod-deploy
+      - admin-stage-deploy
     paths:
       - "admin.skillflow.com/**"
-      - ".github/workflows/deploy-admin-prod.yml"
+      - ".github/workflows/deploy-admin-staging.yml"
 
 
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy prod admin
+    name: Deploy stage admin
     runs-on: ubuntu-latest
 
     steps:
@@ -37,7 +37,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
 
           source: "admin.skillflow.com/*"
-          target: "/opt/apps/production/admin"
+          target: "/opt/apps/staging/admin"
 
           overwrite: true
 
@@ -59,9 +59,9 @@ jobs:
             # Variables
             ####################################################################
 
-            APP_DIR="/opt/apps/production/admin/admin.skillflow.com"
-            COMPOSE_FILE="docker-compose.yml"
-            PROJECT_NAME="skillflow-admin-production"
+            APP_DIR="/opt/apps/staging/admin/admin.skillflow.com"
+            COMPOSE_FILE="docker-compose.stage.yml"
+            PROJECT_NAME="skillflow-admin-staging"
             SERVICE_NAME="admin"
 
             ####################################################################

@@ -1,5 +1,5 @@
 services:
-  web:
+  admin:
     container_name: skillflow-admin-staging
 
     build:

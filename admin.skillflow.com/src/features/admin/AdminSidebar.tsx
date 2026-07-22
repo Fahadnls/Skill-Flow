@@ -15,7 +15,7 @@ const SidebarContent = ({ activeSection, onSelect }: Pick<AdminSidebarProps, 'ac
       <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2f6fff] text-sm font-black text-white shadow-[0_10px_22px_rgba(47,111,255,0.25)]">SF</div>
       <div className="min-w-0">
         <div className="truncate text-sm font-black tracking-[-0.03em] text-[#151923] dark:text-white">SKILLFLOW</div>
-        <div className="truncate text-xs font-semibold text-[#7a8495] dark:text-slate-500">Admin Console</div>
+        <div className="truncate text-xs font-semibold text-[#7a8495] dark:text-slate-500">Admin Console stating</div>
       </div>
     </div>
 
