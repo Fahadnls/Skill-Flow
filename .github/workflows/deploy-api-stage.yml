@@ -1,10 +1,8 @@
 name: Deploy API Staging
-
-
 on:
   push:
     branches:
-      - api-stage-deploy
+      - api-stage-delpoy
     paths:
       - "api.skillflow.com/**"
       - ".github/workflows/deploy-api-stage.yml"
@@ -15,7 +13,6 @@ jobs:
   deploy:
     name: Deploy Staging API
     runs-on: ubuntu-latest
-
     steps:
       ##########################################################################
       # Checkout Repository
@@ -60,7 +57,7 @@ jobs:
 
             APP_DIR="/opt/apps/staging/api/api.skillflow.com"
             COMPOSE_FILE="docker-compose.stage.yml"
-            PROJECT_NAME="skillflow-api-prod"
+            PROJECT_NAME="skillflow-api-stage"
             SERVICE_NAME="api"
 
             ####################################################################
