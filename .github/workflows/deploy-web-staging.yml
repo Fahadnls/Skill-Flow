@@ -1,21 +1,31 @@
-name: Deploy Web staging
+name: Deploy Web Staging
 
 on:
   push:
     branches:
-      - web-staging-deploy
+      - web-stage-deploy
     paths:
-      - 'web.skillflow.com/**'
+      - "web.skillflow.com/**"
+      - ".github/workflows/deploy-web-staging.yml"
 
   workflow_dispatch:
 
 jobs:
   deploy:
+    name: Deploy Staging Web
     runs-on: ubuntu-latest
 
     steps:
+      ##########################################################################
+      # Checkout Repository
+      ##########################################################################
+
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      ##########################################################################
+      # Copy Project to EC2
+      ##########################################################################
 
       - name: Copy Web Project
         uses: appleboy/scp-action@v0.1.7
@@ -23,35 +33,113 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+
           source: "web.skillflow.com/*"
           target: "/opt/apps/staging/web"
+
           overwrite: true
 
-      - name: Deploy
+      ##########################################################################
+      # Deploy
+      ##########################################################################
+
+      - name: Deploy Web
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
+
           script: |
             set -e
 
-             cd /opt/apps/staging/web/web.skillflow.com
-        
-             echo "========== CURRENT DIRECTORY =========="
-             pwd
-        
-             echo "========== FILES =========="
-             ls -la
-        
-             echo "========== DOCKER COMPOSE =========="
-             cat docker-compose.yml
-        
-             echo "========== BUILD =========="
-             docker compose build --no-cache
-        
-             echo "========== START =========="
-             docker compose up -d
-        
-             echo "========== STATUS =========="
-             docker compose ps
+            ####################################################################
+            # Variables
+            ####################################################################
+
+            APP_DIR="/opt/apps/staging/web/web.skillflow.com"
+            COMPOSE_FILE="docker-compose.stage.yml"
+            PROJECT_NAME="skillflow-web-staging"
+            SERVICE_NAME="web"
+
+            ####################################################################
+            # Project
+            ####################################################################
+
+            echo ""
+            echo "========== PROJECT =========="
+            echo "Directory : $APP_DIR"
+            echo "Compose   : $COMPOSE_FILE"
+            echo "Project   : $PROJECT_NAME"
+            echo "Service   : $SERVICE_NAME"
+
+            cd "$APP_DIR"
+
+            ####################################################################
+            # Validate
+            ####################################################################
+
+            echo ""
+            echo "========== VALIDATE =========="
+
+            pwd
+            ls -la
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              config
+
+            ####################################################################
+            # Build
+            ####################################################################
+
+            echo ""
+            echo "========== BUILD =========="
+
+            docker compose \
+             -p "$PROJECT_NAME" \
+             -f "$COMPOSE_FILE" \
+             build \
+             --build-arg VITE_BASE_PATH=/testweb/
+
+            ####################################################################
+            # Deploy
+            ####################################################################
+
+            echo ""
+            echo "========== DEPLOY =========="
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              up -d \
+              --build \
+              --no-deps \
+              "$SERVICE_NAME"
+
+            ####################################################################
+            # Status
+            ####################################################################
+
+            echo ""
+            echo "========== STATUS =========="
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              ps
+
+            docker ps
+
+            ####################################################################
+            # Cleanup
+            ####################################################################
+
+            echo ""
+            echo "========== CLEANUP =========="
+
+            docker image prune -f
+
+            echo ""
+            echo "========== DEPLOYMENT COMPLETED =========="

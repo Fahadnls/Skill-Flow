@@ -1,3 +1,5 @@
+name: skillflow-web-prod
+
 services:
   web:
     container_name: skillflow-web
