@@ -1,7 +1,7 @@
 name: skillflow-web-prod
 
 services:
-  web:
+  admin:
     container_name: skillflow-admin-staging
 
     build:
