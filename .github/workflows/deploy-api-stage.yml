@@ -57,7 +57,7 @@ jobs:
 
             APP_DIR="/opt/apps/staging/api/api.skillflow.com"
             COMPOSE_FILE="docker-compose.stage.yml"
-            PROJECT_NAME="skillflow-api-prod"
+            PROJECT_NAME="skillflow-api-stage"
             SERVICE_NAME="api"
 
             ####################################################################
