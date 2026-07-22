@@ -4,7 +4,8 @@ import { initSocket } from '../src/startup/socket.js';
 
 const checks = [
   { name: 'api index', path: '/', expectJson: true },
-  { name: 'plain health', path: '/health', expectJson: false },
+  { name: 'health page', path: '/health', expectJson: false, expectIncludes: 'skillflow-api Health' },
+  { name: 'tapi health page', path: '/tapi/health', expectJson: false, expectIncludes: 'skillflow-api Health' },
   { name: 'json health', path: '/health.json', expectJson: true },
   { name: 'hello world', path: '/hello-world', expectJson: true },
   { name: 'admin api root', path: '/api/ap', expectJson: true },
@@ -41,7 +42,7 @@ const close = (server) => {
   });
 };
 
-const checkEndpoint = async (baseUrl, { name, path, expectJson }) => {
+const checkEndpoint = async (baseUrl, { name, path, expectJson, expectIncludes }) => {
   const response = await fetch(`${baseUrl}${path}`);
   const body = expectJson ? await response.json() : await response.text();
 
@@ -51,6 +52,10 @@ const checkEndpoint = async (baseUrl, { name, path, expectJson }) => {
 
   if (expectJson && body.success !== true) {
     throw new Error(`${name} returned an unexpected payload`);
+  }
+
+  if (!expectJson && expectIncludes && !body.includes(expectIncludes)) {
+    throw new Error(`${name} returned an unexpected body`);
   }
 
   return {
