@@ -1,19 +1,19 @@
-name: Deploy API Production
+name: Deploy API Staging
 
 
 on:
   push:
     branches:
-      - api-prod-deploy
+      - api-stage-deploy
     paths:
       - "api.skillflow.com/**"
-      - ".github/workflows/deploy-api-prod.yml"
+      - ".github/workflows/deploy-api-stage.yml"
 
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Deploy Production API
+    name: Deploy Staging API
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
 
           source: "api.skillflow.com/*"
-          target: "/opt/apps/production/api"
+          target: "/opt/apps/staging/api"
 
           overwrite: true
 
@@ -58,8 +58,8 @@ jobs:
             # Variables
             ####################################################################
 
-            APP_DIR="/opt/apps/production/api/api.skillflow.com"
-            COMPOSE_FILE="docker-compose.yml"
+            APP_DIR="/opt/apps/staging/api/api.skillflow.com"
+            COMPOSE_FILE="docker-compose.stage.yml"
             PROJECT_NAME="skillflow-api-prod"
             SERVICE_NAME="api"
 
