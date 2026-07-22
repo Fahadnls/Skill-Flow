@@ -97,7 +97,7 @@ export const PageLoader = ({ transitionState }: PageLoaderProps) => {
                 </div>
                 
                 <div className={`mt-5 text-[1.2rem] font-bold tracking-[0.2em] uppercase ${isDark ? 'text-white' : 'text-[#1a2b4b]'} mix-blend-overlay`}>
-                    Skillflow prod
+                    Skillflow
                 </div>
             </div>
         </div>
