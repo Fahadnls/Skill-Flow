@@ -1,0 +1,57 @@
+name: Deploy Web staging
+
+on:
+  push:
+    branches:
+      - web-staging-deploy
+    paths:
+      - 'web.skillflow.com/**'
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy Web Project
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "web.skillflow.com/*"
+          target: "/opt/apps/staging/web"
+          overwrite: true
+
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            set -e
+
+             cd /opt/apps/staging/web/web.skillflow.com
+        
+             echo "========== CURRENT DIRECTORY =========="
+             pwd
+        
+             echo "========== FILES =========="
+             ls -la
+        
+             echo "========== DOCKER COMPOSE =========="
+             cat docker-compose.yml
+        
+             echo "========== BUILD =========="
+             docker compose build --no-cache
+        
+             echo "========== START =========="
+             docker compose up -d
+        
+             echo "========== STATUS =========="
+             docker compose ps
