@@ -1,0 +1,25 @@
+services:
+  api:
+    container_name: skillflow-api-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: skillflow-api-prod:latest
+    restart: unless-stopped
+    environment:
+      NODE_ENV: "production"
+      HOST: "0.0.0.0"
+      PORT: "5000"
+    ports:
+      - "127.0.0.1:5000:5000"
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
