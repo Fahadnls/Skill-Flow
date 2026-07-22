@@ -98,9 +98,10 @@ jobs:
             echo "========== BUILD =========="
 
             docker compose \
-              -p "$PROJECT_NAME" \
-              -f "$COMPOSE_FILE" \
-              build
+             -p "$PROJECT_NAME" \
+             -f "$COMPOSE_FILE" \
+             build \
+             --build-arg VITE_BASE_PATH=/testweb/
 
             ####################################################################
             # Deploy
