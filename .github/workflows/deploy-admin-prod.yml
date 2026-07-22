@@ -8,6 +8,7 @@ on:
     paths:
       - "admin.skillflow.com/**"
       - ".github/workflows/deploy-admin-prod.yml"
+      
 
   workflow_dispatch:
 
