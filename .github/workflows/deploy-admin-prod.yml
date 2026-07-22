@@ -8,7 +8,7 @@ on:
     paths:
       - "admin.skillflow.com/**"
       - ".github/workflows/deploy-admin-prod.yml"
-      
+
 
   workflow_dispatch:
 
@@ -60,7 +60,7 @@ jobs:
             ####################################################################
 
             APP_DIR="/opt/apps/production/admin/admin.skillflow.com"
-            COMPOSE_FILE="docker-compose.stage.yml"
+            COMPOSE_FILE="docker-compose.yml"
             PROJECT_NAME="skillflow-admin-production"
             SERVICE_NAME="admin"
 
