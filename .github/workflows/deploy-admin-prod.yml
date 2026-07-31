@@ -1,0 +1,146 @@
+name: Deploy admin production
+
+
+on:
+  push:
+    branches:
+      - admin-prod-deploy
+    paths:
+      - "admin.skillflow.com/**"
+      - ".github/workflows/deploy-admin-prod.yml"
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy prod admin
+    runs-on: ubuntu-latest
+
+    steps:
+      ##########################################################################
+      # Checkout Repository
+      ##########################################################################
+
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      ##########################################################################
+      # Copy Project to EC2
+      ##########################################################################
+
+      - name: Copy admin Project
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          source: "admin.skillflow.com/*"
+          target: "/opt/apps/production/admin"
+
+          overwrite: true
+
+      ##########################################################################
+      # Deploy
+      ##########################################################################
+
+      - name: Deploy admin
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+
+          script: |
+            set -e
+
+            ####################################################################
+            # Variables
+            ####################################################################
+
+            APP_DIR="/opt/apps/production/admin/admin.skillflow.com"
+            COMPOSE_FILE="docker-compose.stage.yml"
+            PROJECT_NAME="skillflow-admin-production"
+            SERVICE_NAME="admin"
+
+            ####################################################################
+            # Project
+            ####################################################################
+
+            echo ""
+            echo "========== PROJECT =========="
+            echo "Directory : $APP_DIR"
+            echo "Compose   : $COMPOSE_FILE"
+            echo "Project   : $PROJECT_NAME"
+            echo "Service   : $SERVICE_NAME"
+
+            cd "$APP_DIR"
+
+            ####################################################################
+            # Validate
+            ####################################################################
+
+            echo ""
+            echo "========== VALIDATE =========="
+
+            pwd
+            ls -la
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              config
+
+            ####################################################################
+            # Build
+            ####################################################################
+
+            echo ""
+            echo "========== BUILD =========="
+
+            docker compose \
+             -p "$PROJECT_NAME" \
+             -f "$COMPOSE_FILE" \
+             build \
+             
+
+            ####################################################################
+            # Deploy
+            ####################################################################
+
+            echo ""
+            echo "========== DEPLOY =========="
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              up -d \
+              --build \
+              --no-deps \
+              "$SERVICE_NAME"
+
+            ####################################################################
+            # Status
+            ####################################################################
+
+            echo ""
+            echo "========== STATUS =========="
+
+            docker compose \
+              -p "$PROJECT_NAME" \
+              -f "$COMPOSE_FILE" \
+              ps
+
+            docker ps
+
+            ####################################################################
+            # Cleanup
+            ####################################################################
+
+            echo ""
+            echo "========== CLEANUP =========="
+
+            docker image prune -f
+
+            echo ""
+            echo "========== DEPLOYMENT COMPLETED =========="

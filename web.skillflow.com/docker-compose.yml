@@ -1,17 +1,19 @@
+name: skillflow-web-prod
+
 services:
-  admin:
-    container_name: skillflow-admin-staging
+  web:
+    container_name: skillflow-web
 
     build:
       context: .
       dockerfile: Dockerfile
 
-    image: skillflow-admin-staging:latest
+    image: skillflow-web:latest
 
     restart: unless-stopped
 
     ports:
-      - "127.0.0.1:3003:80"
+      - "127.0.0.1:3000:80"
 
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost"]

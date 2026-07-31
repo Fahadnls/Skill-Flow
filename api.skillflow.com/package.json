@@ -1,0 +1,19 @@
+{
+  "name": "skillflow-api-check",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "check": "node scripts/check-server.js",
+    "test:server": "node scripts/test-node-server.js",
+    "dev": "NODE_ENV=development node src/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "helmet": "^7.1.0",
+    "socket.io": "^4.7.4"
+  },
+  "devDependencies": {}
+}
