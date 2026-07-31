@@ -4,10 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node src/index.js",
+    "start": "node init && node src/index.js",
     "check": "node scripts/check-server.js",
     "test:server": "node scripts/test-node-server.js",
-    "dev": "NODE_ENV=development node src/index.js"
+    "dev": "node init && NODE_ENV=development node src/index.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
